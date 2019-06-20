@@ -65,7 +65,6 @@ $(document).ready(function(){
 
     movePlayer(event){
       let validMove = false;
-      let cashSquare = false;
       let player = $('#player');
       let position = $('#player').parent().attr('id');
       let rowNumber = position[0];
@@ -120,7 +119,7 @@ $(document).ready(function(){
           }
           break;
       }
-
+      cashTd()
     }
 
 
@@ -141,11 +140,16 @@ $(document).ready(function(){
 
     }
 
-    cashTd(newRow, newColumn){
-      if($('#'+ newRow +','+newCoulumn).hasClass('cash')){
-        get cash(){
-          return $('#'+ newRow +','+newCoulumn).text()
-        }
+    cashTd(){
+      let position = $('#player').parent().attr('id');
+      let rowNumber = position[0];
+      let columnNumber = position[2];
+      let currentPosition = $(`#${rowNumber},${columnNumber}`);
+      if(currentPosition.hasClass('cash')){
+        let cash = currentPosition.text();
+        // PUSH to player class
+        // lastly remove the cash from the title
+        currentPosition.empty();
       }
     }
 
