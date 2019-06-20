@@ -1,0 +1,26 @@
+table td{
+  padding: 25px;
+  border: 5px solid red;
+  position: relative;
+}
+
+table{
+  margin: auto;
+}
+
+h1{
+  text-align: center;
+}
+
+.blocked{
+  background-color: gray;
+}
+
+.cash{
+  background-color: gold;
+}
+
+#player{
+  position: absolute;
+
+}
