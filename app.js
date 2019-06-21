@@ -63,63 +63,62 @@ $(document).ready(function(){
       }
     }
 
+    addPlayer(){
+      let emptyCell = false;
+      let randomCoulumn = Math.floor(Math.random()*this.columnSize);
+      let randomRow = Math.floor(Math.random()*this.rowSize);
+      let randomId = `${randomRow},${randomCoulumn}`;
+      while(emptyCell === false){
+        let randomtd = $('#'+randomId);
+        if(!$(randomtd).hasClass('blocked') && !$(randomtd).hasClass('cash')){
+          $(randomtd).append($('<div></div>')).attr('id', 'player').text('Player');
+          let emptyCell = true;
+        }
+      }
+    }
+
+    //Event Listener
+
     movePlayer(event){
       let validMove = false;
       let player = $('#player');
       let position = $('#player').parent().attr('id');
       let rowNumber = position[0];
       let columnNumber = position[2];
+      let deltaRow = 0, deltaCol = 0;
       let newRow = rowNumber + deltaRow;
       let newColumn = columnNumber + deltaColumn;
       // use switch only to compute new row and new column
       // after switch call valid move;
-      switch (event.keynumber)
+      switch (event.key)
       {
         case 37: //Left //currentposition minus id with 1
-          deltaRow = 0;
-          deltaColumn = -1;
-          validMove(newRow, newColumn)
-          if(validMove = true){
-            player.remove();
-            let newTd = $(`#${newRow},${newCoulumn}` );
-            newTd.append(player)
-          }
+          deltaColumn--;
           break;
 
         case 38: //Up
-          deltaRow = -1;
-          deltaColumn = 0;
-          validMove(newRow, newColumn)
-          if(validMove = true){
-            player.remove();
-            let newTd = $(`#${newRow},${newCoulumn}` );
-            newTd.append(player)
-          }
+          deltaRow--;
           break;
 
         case 39: //Right
-          deltaRow = 0;
-          deltaColumn = 1;
-          validMove(newRow, newColumn)
-          if(validMove = true){
-            player.remove();
-            let newTd = $(`#${newRow},${newCoulumn}` );
-            newTd.append(player)
-          }
+          deltaColumn++;
           break;
 
         case 40: //Down
-          deltaRow = 1;
-          deltaColumn = 0;
-          validMove(newRow, newColumn)
-          if(validMove = true){
-            player.remove();
-            let newTd = $(`#${newRow},${newCoulumn}` );
-            newTd.append(player)
-          }
+          deltaRow++;
           break;
       }
-      cashTd()
+      validMove(newRow, newColumn);
+      move();
+      cashTd();
+    }
+
+    move(){
+      if(validMove == true){
+        player.remove();
+        let newTd = $(`#${newRow},${newCoulumn}` );
+        newTd.append(player)
+      }
     }
 
 
@@ -140,34 +139,20 @@ $(document).ready(function(){
 
     }
 
-    cashTd(){
-      let position = $('#player').parent().attr('id');
-      let rowNumber = position[0];
-      let columnNumber = position[2];
-      let currentPosition = $(`#${rowNumber},${columnNumber}`);
-      if(currentPosition.hasClass('cash')){
-        let cash = currentPosition.text();
-        // PUSH to player class
-        // lastly remove the cash from the title
-        currentPosition.empty();
-      }
+    getPlayer(){
+      let player = $('#player');
+      return player;
     }
 
-    addPlayer(){
-      let emptyCell = false;
-      let randomCoulumn = Math.floor(Math.random()*this.columnSize);
-      let randomRow = Math.floor(Math.random()*this.rowSize);
-      let randomId = `${randomRow},${randomCoulumn}`;
-      while(emptyCell === false){
-        let randomtd = $('#'+randomId);
-        if(!$(randomtd).hasClass('blocked') && !$(randomtd).hasClass('cash')){
-          $(randomtd).append($('<div></div>')).attr('id', 'player').text('Player');
-          let emptyCell = true;
-        }
+    //Method used to transferCash
+    transferCash(){
+      let square = this.getSquareWithPlayer();
+      let player = square.getPlayer()
+      if(square.hasClass('cash').text() > 0){
+        //WHAT SHOULD I DO HERE??
+        player.
       }
     }
-
-
   }
 
 

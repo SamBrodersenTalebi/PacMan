@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-  class Player{
+  export class Player{
     constructor(){
       this.cash = 0;
     }
