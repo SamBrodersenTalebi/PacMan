@@ -108,12 +108,12 @@ $(document).ready(function(){
           deltaRow++;
           break;
       }
-      validMove(newRow, newColumn);
-      move();
-      cashTd();
+      validMove = checkValidMove(newRow, newColumn);
+      move(validMove);
+      transferCash();
     }
 
-    move(){
+    move(validMove){
       if(validMove == true){
         player.remove();
         let newTd = $(`#${newRow},${newCoulumn}` );
@@ -122,7 +122,8 @@ $(document).ready(function(){
     }
 
 
-    validMove(newRow, newColumn){
+    checkValidMove(newRow, newColumn){
+      let square = this.getSquare(newRow,newColumn);
       if (newRow < 1 || newRow > this.rowSize){
         return false;
       }
@@ -130,7 +131,7 @@ $(document).ready(function(){
         return false;
       }
       // I need to check if the inteded square that the player wants to move into has a class of blocked is this the correct way to do so? I call the valid move after the switch statement so it assumes that the player has moved into the new square.
-      else if($('#'+ newRow +','+newCoulumn).hasClass('blocked')){
+      else if(square.hasClass('blocked')){
         return false;
       }
       else{

@@ -7,5 +7,11 @@ $(document).ready(function(){
       let columnNumber = position[2];
       return rowNumber, columnNumber;
     }
+
+    getSquare(newRow,newColumn){
+      let id = `${newRow},${newCoulumn}`;
+      let td = $('#' + id);
+    }
+
   }
 });
