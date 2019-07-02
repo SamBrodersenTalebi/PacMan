@@ -68,7 +68,7 @@ import { Player } from './player.js'
 
 
     // ------------------------------------------------------------------------
-    // add blocked and cash squares
+    // add blocked, cash squares and player
     // ------------------------------------------------------------------------
 
     blockedsquares(){
@@ -76,10 +76,9 @@ import { Player } from './player.js'
       let i = 0;
       // while there is less than five td's that has the class of blocked then run the code
       while (i < 5){
-        //Grabs one random table cell
+        //Grabs one random table cell and check if it is blocked
         if(randomsquare.blocked == false){
-          // if the random cell that was just grab does not have a class of cash or blocked
-          // then add the class of blocked
+          // if random td is not blocked set it to blocked and increment i by 1.
           randomsquare.blocked = true;
           i++;
         }
@@ -89,7 +88,7 @@ import { Player } from './player.js'
     cashSquare(){
       let randomsquare = this.getRandomSquare();
       let cash = [30,70,100,50,50];
-      // while there is less than five td's that has the class of cash then run the code
+      // while the cash array's length is greater than 0 run this code.
       while(cash.length > 0){
         if(randomsquare.blocked == false && randomsquare.cash == 0){
           //Use pop method to remove last element of cash array
@@ -101,9 +100,7 @@ import { Player } from './player.js'
     addPlayer(){
       let emptyCell = false;
       let p = new Player('Sam');
-      let randomCoulumn = randomNumber(this.columnSize);
-      let randomRow = randomNumber(this.rowSize);
-      let randomsquare = this.board[randomRow][randomCoulumn];
+      let randomsquare = this.getRandomSquare();
       while(emptyCell === false){
         if(randomsquare.blocked == false && randomsquare.cash == 0){
           randomsquare.setPlayer(p);
@@ -112,15 +109,13 @@ import { Player } from './player.js'
       }
     }
 
-    //Event Listener
+    // ------------------------------------------------------------------------
+    // EVENT Handlers
+    // ------------------------------------------------------------------------
 
     movePlayer(event){
-      //
       let validMove = false;
-      let player = $('#player');
-      let position = $('#player').parent().attr('id');
-      let rowNumber = position[0];
-      let columnNumber = position[2];
+      let player = this.getSquareWithPlayer();
       let deltaRow = 0, deltaCol = 0;
       let newRow = rowNumber + deltaRow;
       let newColumn = columnNumber + deltaColumn;
@@ -151,7 +146,13 @@ import { Player } from './player.js'
       }
     }
 
-    move(newRow,newColumn){
+    move(deltaRow,deltaCol){
+      let playerSquare = this.getPlayerSquare();
+
+      let newRow = location.row + deltaRow;
+      let newCol = location.row + deltaCol;
+
+      // REMOVE THE PLAYER AND SET IT INTO NEW ROW CALL THE TWO METHODS THAT I HAVE DEFINED IN SQUARE CLASS
     }
 
 
@@ -176,13 +177,10 @@ import { Player } from './player.js'
     //Method used to transferCash
     transferCash(){
       let square = this.getSquareWithPlayer();
-      let player = square.getPlayer()
+      let player = square.$('#player');
       if(square.hasClass('cash').text() > 0){
-        //WHAT SHOULD I DO HERE??
-        player.addCash();
+        player.addCash(square.text());
         square.empty();
       }
     }
   }
-
-  var board = new Board(5,3);
