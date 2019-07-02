@@ -1,4 +1,5 @@
-$(document).ready(function(){
+import { Square } from './square.js'
+import { Player } from './player.js'
 
   class Board{
 
@@ -6,18 +7,16 @@ $(document).ready(function(){
         $('#tableDiv').on('keypress', movePlayer);
         this.rowSize = row;
         this.columnSize = column;
-        this.board = this.createModel();
+        this.board = this.createModel(); //contains all the squares in an array
         this.createtable();
         this.blockedsquares();
         this.cashSquare();
         this.addPlayer();
     }
 
-
-    randomNumber(num){
-      let number = Math.floor(Math.random()*num)
-      return number;
-    }
+    // ------------------------------------------------------------------------
+    // Model and View methods
+    // ------------------------------------------------------------------------
 
     //create model with this method
     createModel(){
@@ -55,10 +54,25 @@ $(document).ready(function(){
     // Squares
     // ------------------------------------------------------------------------
 
+    getSquareWithPlayer(){
+      let location = Square.GetPlayerLocation();
+      //return player from model array
+      return this.board[location.row][location.column]
+    }
+
+    getRandomSquare(){
+      let row = Math.floor(Math.random()*this.rowSize);
+      let column = Math.floor(Math.random()*this.columnSize);
+      return this.board[row][column];
+    }
+
+
+    // ------------------------------------------------------------------------
+    // add blocked and cash squares
+    // ------------------------------------------------------------------------
+
     blockedsquares(){
-      let randomCoulumn = randomNumber(this.columnSize);
-      let randomRow = randomNumber(this.rowSize);
-      let randomsquare = this.board[randomRow][randomCoulumn];
+      let randomsquare = this.getRandomSquare();
       let i = 0;
       // while there is less than five td's that has the class of blocked then run the code
       while (i < 5){
@@ -73,9 +87,7 @@ $(document).ready(function(){
     }
 
     cashSquare(){
-      let randomCoulumn = randomNumber(this.columnSize);
-      let randomRow = randomNumber(this.rowSize);
-      let randomsquare = this.board[randomRow][randomCoulumn];
+      let randomsquare = this.getRandomSquare();
       let cash = [30,70,100,50,50];
       // while there is less than five td's that has the class of cash then run the code
       while(cash.length > 0){
@@ -161,11 +173,6 @@ $(document).ready(function(){
 
     }
 
-    getPlayer(){
-      let player = $('#player');
-      return player;
-    }
-
     //Method used to transferCash
     transferCash(){
       let square = this.getSquareWithPlayer();
@@ -179,5 +186,3 @@ $(document).ready(function(){
   }
 
   var board = new Board(5,3);
-
-});
