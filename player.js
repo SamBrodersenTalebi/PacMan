@@ -1,7 +1,8 @@
 $(document).ready(function(){
 
   export class Player{
-    constructor(){
+    constructor(name){
+      this.name = name;
       this.cash = 0;
     }
 

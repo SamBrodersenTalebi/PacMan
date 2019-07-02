@@ -6,13 +6,34 @@ $(document).ready(function(){
         $('#tableDiv').on('keypress', movePlayer);
         this.rowSize = row;
         this.columnSize = column;
+        this.board = this.createModel();
+        this.createtable();
+        this.blockedsquares();
+        this.cashSquare();
+        this.addPlayer();
     }
+
 
     randomNumber(num){
       let number = Math.floor(Math.random()*num)
       return number;
     }
 
+    //create model with this method
+    createModel(){
+      let model = [];
+
+      for (let r = 0; r < this.rowSize; r++){
+        model.push([]) //start new row
+        for (let c = 0; c < this.columnSize; c++){
+          let squareId = `${r},${c}`;
+          model[r].push( new Square(squareId) ); // create new square and push to the current row;
+        }
+      }
+      return model;
+    }
+
+    // Create view with this method
     createtable(){
       let tableBody = '<table>';
 
@@ -29,19 +50,23 @@ $(document).ready(function(){
       $('#tableDiv').html(tableBody);
     }
 
+
+    // ------------------------------------------------------------------------
+    // Squares
+    // ------------------------------------------------------------------------
+
     blockedsquares(){
       let randomCoulumn = randomNumber(this.columnSize);
       let randomRow = randomNumber(this.rowSize);
-      let randomId = `${randomRow},${randomCoulumn}`;
+      let randomsquare = this.board[randomRow][randomCoulumn];
       let i = 0;
       // while there is less than five td's that has the class of blocked then run the code
       while (i < 5){
         //Grabs one random table cell
-        let randomtd = $('#'+randomId);
-        if(!$(randomtd).hasClass('blocked') && !$(randomtd).hasClass('cash')){
+        if(randomsquare.blocked == false){
           // if the random cell that was just grab does not have a class of cash or blocked
           // then add the class of blocked
-          randomtd.addClass('blocked');
+          randomsquare.blocked = true;
           i++;
         }
       }
@@ -50,28 +75,26 @@ $(document).ready(function(){
     cashSquare(){
       let randomCoulumn = randomNumber(this.columnSize);
       let randomRow = randomNumber(this.rowSize);
-      let randomId = `${randomRow},${randomCoulumn}`;
+      let randomsquare = this.board[randomRow][randomCoulumn];
       let cash = [30,70,100,50,50];
       // while there is less than five td's that has the class of cash then run the code
       while(cash.length > 0){
-        //grab random td cell
-        let randomtd = $('#'+randomId);
-        if(!$(randomtd).hasClass('blocked') && !$(randomtd).hasClass('cash')){
+        if(randomsquare.blocked == false && randomsquare.cash == 0){
           //Use pop method to remove last element of cash array
-          randomtd.addClass('cash').text(cash.pop());
+          randomsquare.cash = cash.pop();
         }
       }
     }
 
     addPlayer(){
       let emptyCell = false;
-      let randomCoulumn = Math.floor(Math.random()*this.columnSize);
-      let randomRow = Math.floor(Math.random()*this.rowSize);
-      let randomId = `${randomRow},${randomCoulumn}`;
+      let p = new Player('Sam');
+      let randomCoulumn = randomNumber(this.columnSize);
+      let randomRow = randomNumber(this.rowSize);
+      let randomsquare = this.board[randomRow][randomCoulumn];
       while(emptyCell === false){
-        let randomtd = $('#'+randomId);
-        if(!$(randomtd).hasClass('blocked') && !$(randomtd).hasClass('cash')){
-          $(randomtd).append($('<div></div>')).attr('id', 'player').text('Player');
+        if(randomsquare.blocked == false && randomsquare.cash == 0){
+          randomsquare.setPlayer(p);
           let emptyCell = true;
         }
       }
@@ -80,6 +103,7 @@ $(document).ready(function(){
     //Event Listener
 
     movePlayer(event){
+      //
       let validMove = false;
       let player = $('#player');
       let position = $('#player').parent().attr('id');
@@ -108,22 +132,18 @@ $(document).ready(function(){
           deltaRow++;
           break;
       }
-      validMove = checkValidMove(newRow, newColumn);
-      move(validMove);
-      transferCash();
+      validMove = this.checkValidMove(newRow, newColumn);
+      if (validMove == true){
+        this.move();
+        this.transferCash();
+      }
     }
 
-    move(validMove){
-      if(validMove == true){
-        player.remove();
-        let newTd = $(`#${newRow},${newCoulumn}` );
-        newTd.append(player)
-      }
+    move(newRow,newColumn){
     }
 
 
     checkValidMove(newRow, newColumn){
-      let square = this.getSquare(newRow,newColumn);
       if (newRow < 1 || newRow > this.rowSize){
         return false;
       }
@@ -131,7 +151,8 @@ $(document).ready(function(){
         return false;
       }
       // I need to check if the inteded square that the player wants to move into has a class of blocked is this the correct way to do so? I call the valid move after the switch statement so it assumes that the player has moved into the new square.
-      else if(square.hasClass('blocked')){
+      let square = this.getSquare(newRow,newColumn); //getSquare should be in Board!
+      if(square.blocked == true){
         return false;
       }
       else{
@@ -151,10 +172,12 @@ $(document).ready(function(){
       let player = square.getPlayer()
       if(square.hasClass('cash').text() > 0){
         //WHAT SHOULD I DO HERE??
-        player.
+        player.addCash();
+        square.empty();
       }
     }
   }
 
+  var board = new Board(5,3);
 
 });
