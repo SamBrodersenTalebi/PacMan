@@ -13,8 +13,11 @@
 
   </body>
   <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-  <script src="app.js"></script>
-  <!--<script src="square.js"></script>-->
-  <!--<script src="player.js"></script> -->
-  <!--<script src="square.js"></script>-->
+  <script type="module">
+    import { Board } from './board.js';
+
+    $(function () {
+                let board = new Board(7, 5);
+    });
+  </script>
 </html>

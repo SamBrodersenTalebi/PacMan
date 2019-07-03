@@ -41,6 +41,8 @@ import { Player } from './player.js'
 
         for(let j = 1; j < this.columnSize; j++){
           tableBody += `<td id = "${i},${j}">`;
+          tableBody += '<div>';
+          tableBody += '</div>';
           tableBody += '</td>';
         }
         tableBody += '</tr>';
@@ -66,16 +68,20 @@ import { Player } from './player.js'
       return this.board[row][column];
     }
 
+    getSquare(row, column){
+      return this.board[row][column];
+    }
+
 
     // ------------------------------------------------------------------------
     // add blocked, cash squares and player
     // ------------------------------------------------------------------------
 
     blockedsquares(){
-      let randomsquare = this.getRandomSquare();
       let i = 0;
       // while there is less than five td's that has the class of blocked then run the code
       while (i < 5){
+        let randomsquare = this.getRandomSquare();
         //Grabs one random table cell and check if it is blocked
         if(randomsquare.blocked == false){
           // if random td is not blocked set it to blocked and increment i by 1.
@@ -86,10 +92,10 @@ import { Player } from './player.js'
     }
 
     cashSquare(){
-      let randomsquare = this.getRandomSquare();
       let cash = [30,70,100,50,50];
       // while the cash array's length is greater than 0 run this code.
       while(cash.length > 0){
+        let randomsquare = this.getRandomSquare();
         if(randomsquare.blocked == false && randomsquare.cash == 0){
           //Use pop method to remove last element of cash array
           randomsquare.cash = cash.pop();
@@ -100,8 +106,8 @@ import { Player } from './player.js'
     addPlayer(){
       let emptyCell = false;
       let p = new Player('Sam');
-      let randomsquare = this.getRandomSquare();
       while(emptyCell === false){
+        let randomsquare = this.getRandomSquare();
         if(randomsquare.blocked == false && randomsquare.cash == 0){
           randomsquare.setPlayer(p);
           let emptyCell = true;
@@ -114,11 +120,11 @@ import { Player } from './player.js'
     // ------------------------------------------------------------------------
 
     movePlayer(event){
-      let validMove = false;
-      let player = this.getSquareWithPlayer();
+      let location = Square.GetPlayerLocation();
       let deltaRow = 0, deltaCol = 0;
-      let newRow = rowNumber + deltaRow;
-      let newColumn = columnNumber + deltaColumn;
+      let newRow = location.row + deltaRow;
+      let newColumn = location.column + deltaColumn;
+      let isArrowKey = true;
       // use switch only to compute new row and new column
       // after switch call valid move;
       switch (event.key)
@@ -138,19 +144,27 @@ import { Player } from './player.js'
         case 40: //Down
           deltaRow++;
           break;
+
+        default:
+          isArrowKey = false;
+          break;
       }
-      validMove = this.checkValidMove(newRow, newColumn);
-      if (validMove == true){
-        this.move();
-        this.transferCash();
+      if(isArrowKey){
+        let validMove = this.checkValidMove(newRow, newColumn);
+        if (validMove == true){
+          this.move(newRow, newColumn);
+        }
       }
     }
 
-    move(deltaRow,deltaCol){
-      let playerSquare = this.getPlayerSquare();
+    move(newRow, newColumn){
+      let playerSquare = this.getSquareWithPlayer();
+      let player = playerSquare.removePlayer();
 
-      let newRow = location.row + deltaRow;
-      let newCol = location.row + deltaCol;
+      let square = this.getSquare(newRow,newColumn);
+      square.setPlayer(player);
+
+      this.transferCash(player, square);
 
       // REMOVE THE PLAYER AND SET IT INTO NEW ROW CALL THE TWO METHODS THAT I HAVE DEFINED IN SQUARE CLASS
     }
@@ -164,7 +178,7 @@ import { Player } from './player.js'
         return false;
       }
       // I need to check if the inteded square that the player wants to move into has a class of blocked is this the correct way to do so? I call the valid move after the switch statement so it assumes that the player has moved into the new square.
-      let square = this.getSquare(newRow,newColumn); //getSquare should be in Board!
+      let square = this.getSquare(newRow,newColumn);
       if(square.blocked == true){
         return false;
       }
@@ -175,12 +189,10 @@ import { Player } from './player.js'
     }
 
     //Method used to transferCash
-    transferCash(){
-      let square = this.getSquareWithPlayer();
-      let player = square.$('#player');
-      if(square.hasClass('cash').text() > 0){
-        player.addCash(square.text());
-        square.empty();
+    transferCash(player,square){
+      if(square.cash > 0){
+        player.cash += square.cash;
+        square.removeCash();
       }
     }
   }

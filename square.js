@@ -33,6 +33,7 @@ import { Player } from './player.js'
       this.cash = cash;
       let td = $('#'+this.id)
       if(this.cash > 0){
+        //$(td).append('<div>').text(this.cash);
         $(td).addClass('cash');
       } else{
         $(td).removeClass('cash');
@@ -45,16 +46,23 @@ import { Player } from './player.js'
       this.player = p;
 
       //View
-      $('#'+this.id).append(p)
+      $('#'+this.id).append(p.elem);
     }
 
     removePlayer(){
       let p = this.player;
       this.player = null;
 
-      $('#'+this.id).children()[0].remove(); //removes the first child of the <td> which is the player1
+      $('#'+this.id).children()[0].replaceWith('<div>');
 
       return p;
+    }
+
+    removeCash(){
+      this.cash = 0;
+
+      //view
+      $('#'+this.id).children()[1].replaceWith('<div>');
     }
 
   }
