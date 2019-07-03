@@ -41,7 +41,9 @@ import { Player } from './player.js'
 
         for(let j = 1; j < this.columnSize; j++){
           tableBody += `<td id = "${i},${j}">`;
-          tableBody += '<div>';
+          tableBody += '<div>'; //Div to contain player
+          tableBody += '</div>';
+          tableBody += '<div>'; //Div to contain cash
           tableBody += '</div>';
           tableBody += '</td>';
         }

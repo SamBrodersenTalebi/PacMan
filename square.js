@@ -33,7 +33,7 @@ import { Player } from './player.js'
       this.cash = cash;
       let td = $('#'+this.id)
       if(this.cash > 0){
-        //$(td).append('<div>').text(this.cash);
+        $(td).children()[1].text(this.cash);
         $(td).addClass('cash');
       } else{
         $(td).removeClass('cash');
