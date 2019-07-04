@@ -18,7 +18,26 @@ import { Player } from './player.js'
       this.player = null;
     }
 
+  // ------------------------------------------------------------------------
+  // GETTER AND SETTER
+  // ------------------------------------------------------------------------
+    get blocked(){
+      return this._blocked;
+    }
 
+    set blocked(boolean){
+      //Update model
+      this.blocked = boolean;
+      //Update view
+      let td = $('#'+this.id);
+      if(boolean){
+        $(td).addClass('blocked');
+      } else{
+        $(td).removeClass('blocked');
+      }
+    }
+
+/*
     setBlocked(boolean){
       this.blocked = boolean;
       let td = $('#'+this.id)
@@ -28,7 +47,25 @@ import { Player } from './player.js'
         $(td).removeClass('blocked');
       }
     }
+*/
 
+    get cash(){
+      return this._cash;
+    }
+
+    set cash(number){
+        //model
+        this.cash = number
+        //view
+        let td = $('#'+this.id);
+        if(number){
+          $(td).addClass('cash').children()[1].html(number);
+        } else{
+          $(td).removeClass('cash').children()[1].html('');
+        }
+    }
+
+/*
     setCash(cash){
       this.cash = cash;
       let td = $('#'+this.id)
@@ -39,7 +76,7 @@ import { Player } from './player.js'
         $(td).removeClass('cash');
       }
     }
-
+*/
 
 
     setPlayer(p){
