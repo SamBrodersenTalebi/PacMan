@@ -83,7 +83,7 @@ import { Player } from './player.js'
       this.player = p;
 
       //View
-      $('#'+this.id).append(p.elem);
+      $('#'+this.id).children()[0].append(p.elem);
     }
 
     removePlayer(){
