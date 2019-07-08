@@ -88,6 +88,9 @@ import { Player } from './player.js'
         if(randomsquare.blocked == false){
           // if random td is not blocked set it to blocked and increment i by 1.
           randomsquare.blocked = true;
+          //call the getter function
+          randomsquare.blockedsquare();
+          //or randomsquare.blockedsquare() = true;???
           i++;
         }
       }
@@ -101,6 +104,8 @@ import { Player } from './player.js'
         if(randomsquare.blocked == false && randomsquare.cash == 0){
           //Use pop method to remove last element of cash array
           randomsquare.cash = cash.pop();
+          randomsquare.cashsq();
+          //or randomsquare.cashsq = cash.pop();????
         }
       }
     }

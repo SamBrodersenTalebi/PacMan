@@ -21,11 +21,12 @@ import { Player } from './player.js'
   // ------------------------------------------------------------------------
   // GETTER AND SETTER
   // ------------------------------------------------------------------------
-    get blocked(){
+    get blockedsquare(){
       return this._blocked;
     }
 
-    set blocked(boolean){
+    //Setter takes the argument from the getter function
+    set blockedsquare(boolean){
       //Update model
       this.blocked = boolean;
       //Update view
@@ -49,11 +50,13 @@ import { Player } from './player.js'
     }
 */
 
-    get cash(){
+    get cashsq(){
       return this._cash;
     }
 
-    set cash(number){
+    //Setter takes the argument from the getter function and runs the functions
+    //this will updated the instance properties of the object and the DOM.
+    set cashsq(number){
         //model
         this.cash = number
         //view

@@ -18,8 +18,6 @@ export class Player{
     this.cash += cash;
 
     //UPDATE VIEW! TO REPLACE CURRENT TEXT WITH 0;
-    let loc = Square.GetPlayerLocation();
-    let square = this.board.getSquare(loc.row, loc.column);
-    $(square).children()[1].text(this.cash);
+    this.elem[1].text(0);
   }
 };
